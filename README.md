@@ -1,2 +1,2 @@
 # future_academy
-![Future Academy](.sparks.png)
+![Future Academy](./sparks.png)
