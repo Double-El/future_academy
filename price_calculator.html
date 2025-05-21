@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수수료율 최적화 계산기</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+        }
+        #plot {
+            margin-top: 20px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>수수료율 최적화 계산기</h1>
+        
+        <div class="form-group">
+            <label for="programModifications">프로그램 수정 횟수:</label>
+            <input type="number" id="programModifications" min="0" max="10" value="2">
+        </div>
+
+        <div class="form-group">
+            <label for="transactionCancelled">거래 취소 여부:</label>
+            <select id="transactionCancelled">
+                <option value="N">아니오</option>
+                <option value="Y">예</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="seller">판매자:</label>
+            <select id="seller">
+                <option value="A업체">A업체</option>
+                <option value="B업체">B업체</option>
+                <option value="C업체">C업체</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="rating">평점 (1-5):</label>
+            <input type="number" id="rating" min="1" max="5" step="0.1" value="4.5">
+        </div>
+
+        <div class="form-group">
+            <label for="category">대분류:</label>
+            <select id="category">
+                <option value="홈페이지">홈페이지</option>
+                <option value="모바일앱">모바일앱</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="totalAmount">총 금액:</label>
+            <input type="number" id="totalAmount" min="1000" value="100000">
+        </div>
+
+        <button onclick="calculateOptimalFee()">최적 수수료율 계산</button>
+
+        <div class="result" id="result">
+            <h3>계산 결과</h3>
+            <p id="optimalFee"></p>
+        </div>
+
+        <div id="plot"></div>
+    </div>
+
+    <script>
+        // 간단한 예측 모델 (실제로는 서버에서 CatBoost 모델을 사용해야 함)
+        function predictVolume(params) {
+            // 간단한 선형 모델로 대체
+            let baseVolume = 500;
+            let volume = baseVolume;
+            
+            // 수수료율에 따른 영향
+            volume *= (1 - params.feeRate * 2);
+            
+            // 다른 파라미터들의 영향
+            volume *= (1 + (params.rating - 3) * 0.2);
+            volume *= (1 - params.programModifications * 0.1);
+            volume *= (params.transactionCancelled === 'N' ? 1.2 : 0.8);
+            volume *= (params.category === '홈페이지' ? 1.1 : 1);
+            
+            return Math.max(0, volume);
+        }
+
+        function calculateOptimalFee() {
+            const params = {
+                programModifications: parseFloat(document.getElementById('programModifications').value),
+                transactionCancelled: document.getElementById('transactionCancelled').value,
+                seller: document.getElementById('seller').value,
+                rating: parseFloat(document.getElementById('rating').value),
+                category: document.getElementById('category').value,
+                totalAmount: parseFloat(document.getElementById('totalAmount').value)
+            };
+
+            // 수수료율 범위 생성
+            const feeRates = Array.from({length: 50}, (_, i) => 0.01 + (i * 0.98 / 49));
+            const P = params.totalAmount;
+
+            // 각 수수료율에 대한 결과 계산
+            const results = feeRates.map(feeRate => {
+                const volume = predictVolume({...params, feeRate});
+                const customerBenefit = (1 - feeRate) * P * volume;
+                const platformBenefit = feeRate * P * volume;
+                const nashProduct = (customerBenefit - 1) * (platformBenefit - 1);
+                return {
+                    feeRate,
+                    volume,
+                    customerBenefit,
+                    platformBenefit,
+                    nashProduct
+                };
+            });
+
+            // 최적 수수료율 찾기
+            const optimalResult = results.reduce((max, curr) => 
+                curr.nashProduct > max.nashProduct ? curr : max
+            );
+
+            // 결과 표시
+            document.getElementById('optimalFee').innerHTML = 
+                `최적 수수료율: ${(optimalResult.feeRate * 100).toFixed(2)}%<br>` +
+                `예상 이용자수: ${Math.round(optimalResult.volume)}명<br>` +
+                `고객 이익: ${Math.round(optimalResult.customerBenefit).toLocaleString()}원<br>` +
+                `플랫폼 이익: ${Math.round(optimalResult.platformBenefit).toLocaleString()}원`;
+
+            // 그래프 그리기
+            const trace1 = {
+                x: feeRates,
+                y: results.map(r => r.customerBenefit),
+                name: '고객 이익',
+                type: 'scatter',
+                line: {color: 'blue'}
+            };
+
+            const trace2 = {
+                x: feeRates,
+                y: results.map(r => r.platformBenefit),
+                name: '플랫폼 이익',
+                type: 'scatter',
+                line: {color: 'red'}
+            };
+
+            const trace3 = {
+                x: feeRates,
+                y: results.map(r => r.nashProduct),
+                name: 'Nash Product',
+                type: 'scatter',
+                line: {color: 'green'}
+            };
+
+            const layout = {
+                title: '수수료율 시뮬레이션',
+                xaxis: {
+                    title: '수수료율',
+                    tickformat: '.0%'
+                },
+                yaxis: {
+                    title: '이익'
+                },
+                showlegend: true,
+                legend: {
+                    x: 0,
+                    y: 1
+                }
+            };
+
+            Plotly.newPlot('plot', [trace1, trace2, trace3], layout);
+        }
+    </script>
+</body>
+</html> 
