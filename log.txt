@@ -1,0 +1,9 @@
+Episode 2 completed! - Steps: 93, Reward: 8, Path Length: 93
+Episode 3 completed! - Steps: 179, Reward: -78, Path Length: 179
+Episode 2 completed! - Steps: 189, Reward: -88, Path Length: 189
+Episode 2 completed! - Steps: 71, Reward: 30, Path Length: 71
+Episode 2 completed! - Steps: 167, Reward: -66, Path Length: 167
+Episode 3 completed! - Steps: 511, Reward: -410, Path Length: 511
+Episode 2 completed! - Steps: 255, Reward: -154, Path Length: 255
+Episode 2 completed! - Steps: 1697, Reward: -1596, Path Length: 1697
+Episode 2 completed! - Steps: 1537, Reward: -1436, Path Length: 1537
