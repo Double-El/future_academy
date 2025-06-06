@@ -1,30 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=414, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Banker ChatBot</title>
-  <!-- Professional Banker Theme -->
+  <title>신한 SOL 챗봇</title>
+  <!-- 신한 SOL 스타일 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #1a2636;
-      --secondary: #22304a;
-      --accent: #d4af37;
-      --text: #f5f5f5;
-      --input-bg: #2c3a4e;
-      --chat-bg: #19202b;
-      --session-bg: #232e41;
-      --session-active: #d4af37;
-      --session-inactive: #22304a;
-      --border: #3a4a63;
-      --font: 'Segoe UI', 'Roboto', Arial, sans-serif;
+      --shinhan-blue: #0052A4;
+      --shinhan-mint: #00C1D5;
+      --shinhan-light: #F5F7FA;
+      --shinhan-gray: #E5E8EB;
+      --white: #fff;
+      --text-main: #222;
+      --text-sub: #666;
+      --font: 'Noto Sans KR', 'Apple SD Gothic', 'sans-serif';
     }
     html, body {
       height: 100%;
       margin: 0;
       padding: 0;
-      background: var(--primary);
-      color: var(--text);
+      background: var(--shinhan-light);
+      color: var(--text-main);
       font-family: var(--font);
       width: 100vw;
       height: 100vh;
@@ -36,45 +34,49 @@
       height: 100vh;
       max-width: 414px;
       margin: 0 auto;
-      background: var(--primary);
-      box-shadow: 0 0 20px #0008;
+      background: var(--shinhan-light);
+      box-shadow: 0 0 20px #0001;
+      border-radius: 18px 18px 0 0;
+      border: 1px solid var(--shinhan-gray);
     }
     .sessions {
       width: 80px;
-      background: var(--session-bg);
+      background: var(--white);
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 10px 0;
-      border-right: 1px solid var(--border);
+      border-right: 1px solid var(--shinhan-gray);
       gap: 10px;
     }
     .session {
-      width: 60px;
-      height: 60px;
-      border-radius: 15px;
-      background: var(--session-inactive);
-      color: var(--text);
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--shinhan-gray);
+      color: var(--text-sub);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
-      font-size: 1.1em;
+      font-weight: 500;
+      font-size: 1em;
       cursor: pointer;
       border: 2px solid transparent;
-      transition: background 0.2s, border 0.2s;
+      transition: background 0.2s, border 0.2s, color 0.2s;
       position: relative;
+      margin-bottom: 2px;
     }
     .session.active {
-      background: var(--session-active);
-      color: var(--primary);
-      border: 2px solid var(--accent);
+      background: var(--shinhan-blue);
+      color: var(--white);
+      border: 2px solid var(--shinhan-mint);
+      font-weight: 700;
     }
     .session .close {
       position: absolute;
       top: 2px;
       right: 6px;
-      color: #fff8;
+      color: #888;
       font-size: 0.9em;
       cursor: pointer;
       display: none;
@@ -83,11 +85,11 @@
       display: block;
     }
     .add-session {
-      width: 60px;
-      height: 60px;
-      border-radius: 15px;
-      background: var(--accent);
-      color: var(--primary);
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--shinhan-mint);
+      color: var(--white);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -96,22 +98,42 @@
       margin-top: auto;
       margin-bottom: 10px;
       border: none;
+      box-shadow: 0 2px 8px #00c1d522;
+      transition: background 0.2s;
+    }
+    .add-session:active {
+      background: #00b0c0;
     }
     .chat-area {
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: var(--chat-bg);
+      background: var(--shinhan-light);
       height: 100vh;
       max-width: 334px;
+      border-radius: 0 18px 0 0;
     }
     .chat-header {
       padding: 18px 20px 10px 20px;
       font-size: 1.3em;
-      font-weight: 600;
-      color: var(--accent);
-      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      color: var(--shinhan-blue);
+      border-bottom: 1px solid var(--shinhan-gray);
       letter-spacing: 1px;
+      background: var(--white);
+      border-radius: 0 18px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chat-header::before {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/2/2e/Shinhan_Bank_logo.svg') no-repeat center/contain;
+      vertical-align: middle;
+      margin-right: 6px;
     }
     .chat-messages {
       flex: 1;
@@ -120,59 +142,69 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
-      background: var(--chat-bg);
+      background: var(--shinhan-light);
     }
     .message {
       max-width: 80%;
-      padding: 12px 16px;
-      border-radius: 14px;
+      padding: 13px 18px;
+      border-radius: 18px;
       font-size: 1em;
-      line-height: 1.5;
+      line-height: 1.6;
       word-break: break-word;
-      box-shadow: 0 2px 8px #0002;
+      box-shadow: 0 2px 8px #0001;
+      border: 1px solid var(--shinhan-gray);
     }
     .message.user {
       align-self: flex-end;
-      background: var(--accent);
-      color: var(--primary);
-      border-bottom-right-radius: 4px;
+      background: var(--shinhan-mint);
+      color: var(--white);
+      border-bottom-right-radius: 6px;
+      border: 1.5px solid #b2f2f7;
+      box-shadow: 0 2px 8px #00c1d522;
     }
     .message.assistant {
       align-self: flex-start;
-      background: var(--secondary);
-      color: var(--text);
-      border-bottom-left-radius: 4px;
+      background: var(--white);
+      color: var(--text-main);
+      border-bottom-left-radius: 6px;
+      border: 1.5px solid var(--shinhan-gray);
+      box-shadow: 0 2px 8px #0052a422;
     }
     .chat-input {
       display: flex;
       padding: 12px 16px;
-      background: var(--input-bg);
-      border-top: 1px solid var(--border);
+      background: var(--white);
+      border-top: 1px solid var(--shinhan-gray);
       gap: 8px;
     }
     .chat-input input {
       flex: 1;
-      padding: 10px 14px;
-      border-radius: 8px;
-      border: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--shinhan-gray);
       font-size: 1em;
-      background: #22304a;
-      color: var(--text);
+      background: var(--shinhan-light);
+      color: var(--text-main);
       outline: none;
+      transition: border 0.2s;
+    }
+    .chat-input input:focus {
+      border: 1.5px solid var(--shinhan-mint);
     }
     .chat-input button {
-      background: var(--accent);
-      color: var(--primary);
+      background: var(--shinhan-blue);
+      color: var(--white);
       border: none;
-      border-radius: 8px;
-      padding: 0 18px;
+      border-radius: 12px;
+      padding: 0 22px;
       font-size: 1em;
       font-weight: bold;
       cursor: pointer;
       transition: background 0.2s;
+      box-shadow: 0 2px 8px #0052a422;
     }
     .chat-input button:active {
-      background: #bfa133;
+      background: #003b7a;
     }
     @media (max-width: 414px) {
       #app {
@@ -192,11 +224,16 @@
   <div id="app">
     <div class="sessions" id="sessions"></div>
     <div class="chat-area">
-      <div class="chat-header">Banker ChatBot</div>
+      <div class="chat-header">
+        <button id="shinhan-logo-btn" style="background:none;border:none;padding:0;margin:0;cursor:pointer;outline:none;display:flex;align-items:center;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Shinhan_Bank_logo.svg" alt="신한로고" style="width:28px;height:28px;vertical-align:middle;" />
+        </button>
+        <span style="margin-left:8px; font-weight:700; color:#0052A4; font-size:1.1em;">신한 SOL 챗봇</span>
+      </div>
       <div class="chat-messages" id="chat-messages"></div>
       <form class="chat-input" id="chat-form">
-        <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off" required />
-        <button type="submit">Send</button>
+        <input type="text" id="chat-input" placeholder="메시지를 입력하세요..." autocomplete="off" required />
+        <button type="submit">전송</button>
       </form>
     </div>
   </div>
@@ -205,7 +242,7 @@
     // WARNING: Never expose your OpenAI API key in production!
     const OPENAI_API_KEY = "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";
     const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
-    const SYSTEM_PROMPT = "You are an AI that answers as concisely as possible.";
+    const SYSTEM_PROMPT = "당신은 신한은행의 대표 캐릭터 몰리입니다. 친근하고 따뜻한 말투로, 금융 전문가처럼 답변하세요. 답변은 항상 짧고 명확하게, '~예요', '~드릴게요!' 등 몰리 특유의 말투를 사용하세요.";
     // --- END CONFIG ---
 
     // --- State ---
@@ -250,7 +287,7 @@
       const add = document.createElement('div');
       add.className = 'add-session';
       add.textContent = '+';
-      add.title = 'New Chat';
+      add.title = '새로운 채팅';
       add.onclick = () => {
         sessions.push(createSession('Chat ' + (sessions.length + 1)));
         activeSession = sessions.length - 1;
@@ -268,7 +305,48 @@
         const div = document.createElement('div');
         div.className = 'message ' + (msg.role === 'user' ? 'user' : 'assistant');
         div.textContent = msg.content;
-        chatDiv.appendChild(div);
+        if (msg.role === 'assistant') {
+          // 몰리 캐릭터와 이름 추가
+          const mollyWrap = document.createElement('div');
+          mollyWrap.style.display = 'flex';
+          mollyWrap.style.alignItems = 'flex-start';
+          mollyWrap.style.gap = '8px';
+
+          // 몰리 프로필 이미지
+          const mollyImg = document.createElement('img');
+          mollyImg.src = 'https://shinhangroup.com/kr/about/identity/img/character_moli.png';
+          mollyImg.alt = '몰리';
+          mollyImg.style.width = '36px';
+          mollyImg.style.height = '36px';
+          mollyImg.style.borderRadius = '50%';
+          mollyImg.style.background = '#fff';
+          mollyImg.style.border = '1.5px solid #E5E8EB';
+          mollyImg.style.marginTop = '2px';
+
+          // 말풍선+이름
+          const msgWrap = document.createElement('div');
+          msgWrap.style.display = 'flex';
+          msgWrap.style.flexDirection = 'column';
+          msgWrap.style.alignItems = 'flex-start';
+
+          // 이름
+          const name = document.createElement('div');
+          name.textContent = '몰리';
+          name.style.fontSize = '0.92em';
+          name.style.fontWeight = '700';
+          name.style.color = '#0052A4';
+          name.style.marginBottom = '2px';
+          name.style.marginLeft = '2px';
+
+          msgWrap.appendChild(name);
+          msgWrap.appendChild(div);
+
+          mollyWrap.appendChild(mollyImg);
+          mollyWrap.appendChild(msgWrap);
+          chatDiv.appendChild(mollyWrap);
+        } else {
+          chatDiv.appendChild(div);
+        }
       });
       chatDiv.scrollTop = chatDiv.scrollHeight;
     }
@@ -302,7 +380,7 @@
           const reply = data.choices[0].message.content.trim();
           session.messages.push({ role: 'assistant', content: reply });
         } else {
-          session.messages.push({ role: 'assistant', content: 'Sorry, no response.' });
+          session.messages.push({ role: 'assistant', content: '다시 말씀해주세요.' });
         }
       } catch (e) {
         session.messages.push({ role: 'assistant', content: 'Error: ' + e.message });
@@ -324,6 +402,10 @@
     sessions = [createSession('Chat 1')];
     renderSessions();
     renderMessages();
+    // 신한로고 버튼 클릭 시 bank_interface.html로 이동
+    document.getElementById('shinhan-logo-btn').onclick = function() {
+      window.location.href = 'bank_interface.html';
+    };
   </script>
 </body>
 </html> 

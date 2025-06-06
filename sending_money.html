@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Money</title>
+    <style>
+        body {
+            font-family: 'Apple SD Gothic Neo', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f2f5;
+            color: #222;
+            min-height: 100vh;
+        }
+        .mobile-frame {
+            max-width: 420px;
+            margin: 0 auto;
+            background: #fff;
+            min-height: 100vh;
+            box-shadow: 0 0 16px 0 rgba(0,0,0,0.08);
+            border-radius: 24px 24px 0 0;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.1s;
+        }
+        .shake {
+            animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translateX(-2px); }
+            20%, 80% { transform: translateX(4px); }
+            30%, 50%, 70% { transform: translateX(-8px); }
+            40%, 60% { transform: translateX(8px); }
+            100% { transform: translateX(0); }
+        }
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 16px 8px 16px;
+            background: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-radius: 24px 24px 0 0;
+        }
+        .top-bar .left {
+            display: flex;
+            align-items: center;
+        }
+        .top-bar .back {
+            font-size: 28px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .top-bar .icons {
+            display: flex;
+            gap: 18px;
+            font-size: 22px;
+        }
+        .recipient-section {
+            padding: 0 24px 8px 24px;
+        }
+        .recipient-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        .recipient-account {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 18px;
+        }
+        .question {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        .amount-display {
+            text-align: center;
+            margin: 0 0 8px 0;
+        }
+        .amount-main {
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        .amount-sub {
+            font-size: 18px;
+            color: #888;
+        }
+        .recent-accounts {
+            margin: 18px 0 0 0;
+            padding: 0 24px;
+        }
+        .recent-account-item {
+            background: #f7f8fa;
+            border-radius: 16px;
+            padding: 10px 16px;
+            font-size: 15px;
+            color: #222;
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .recent-account-item .amount {
+            margin-left: auto;
+            color: #888;
+        }
+        .quick-add {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin: 18px 0 0 0;
+            padding: 0 24px;
+        }
+        .quick-add button {
+            flex: 1;
+            background: #f7f8fa;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            color: #1a73e8;
+            padding: 12px 0;
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .quick-add button:active {
+            background: #e3e8f0;
+        }
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 32px 24px 24px 24px;
+            background: #fff;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            max-width: 420px;
+            box-sizing: border-box;
+            border-radius: 0 0 24px 24px;
+        }
+        .keypad button {
+            font-size: 28px;
+            background: #f7f8fa;
+            border: none;
+            border-radius: 16px;
+            padding: 18px 0;
+            color: #222;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .keypad button:active {
+            background: #e3e8f0;
+        }
+        .keypad .action {
+            color: #1a73e8;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        @media (max-width: 480px) {
+            .mobile-frame {
+                max-width: 100vw;
+                border-radius: 0;
+            }
+            .keypad {
+                max-width: 100vw;
+                border-radius: 0 0 24px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-frame">
+        <div class="top-bar">
+            <div class="left">
+                <span class="back" onclick="window.history.back()">&#8592;</span>
+            </div>
+            <div class="icons">
+                <span>😊</span>
+                <span>🎤</span>
+                <span>🏠</span>
+            </div>
+        </div>
+        <div class="recipient-section">
+            <div class="recipient-title">SOL모임통장님께</div>
+            <div class="recipient-account">신한 110-599-129696</div>
+            <div class="question">얼마를 보낼까요?</div>
+        </div>
+        <div class="amount-display">
+            <div class="amount-main" id="amountMain">0원</div>
+            <div class="amount-sub" id="amountSub">0원</div>
+        </div>
+        <div class="recent-accounts">
+            <div class="recent-account-item">
+                신한 110-316-970610 <span class="amount">16원</span>
+            </div>
+        </div>
+        <div class="quick-add">
+            <button onclick="quickAdd(10000)">+1만</button>
+            <button onclick="quickAdd(50000)">+5만</button>
+            <button onclick="quickAdd(100000)">+10만</button>
+            <button onclick="quickAdd(1000000)">+100만</button>
+            <button onclick="setAll()">전액</button>
+        </div>
+        <div class="keypad">
+            <button onclick="appendNum(1)">1</button>
+            <button onclick="appendNum(2)">2</button>
+            <button onclick="appendNum(3)">3</button>
+            <button onclick="appendNum(4)">4</button>
+            <button onclick="appendNum(5)">5</button>
+            <button onclick="appendNum(6)">6</button>
+            <button onclick="appendNum(7)">7</button>
+            <button onclick="appendNum(8)">8</button>
+            <button onclick="appendNum(9)">9</button>
+            <button onclick="backspace()">&#8592;</button>
+            <button onclick="appendNum(0)">0</button>
+            <button class="action" onclick="submitAmount()">완료</button>
+        </div>
+        <canvas id="sparkCanvas" style="position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:100;"></canvas>
+    </div>
+    <script>
+        let amount = '';
+        let maxAmount = 9999999999;
+        let sparkInputTimeout = null;
+
+        function formatNumber(num) {
+            return num.toLocaleString();
+        }
+        function updateAmountDisplay() {
+            let num = parseInt(amount) || 0;
+            document.getElementById('amountMain').textContent = formatNumber(num) + '원';
+            document.getElementById('amountSub').textContent = formatNumber(num) + '원';
+        }
+        function appendNum(n) {
+            if (amount.length >= 10) return;
+            if (amount === '0') amount = '';
+            amount += n;
+            if (parseInt(amount) > maxAmount) amount = maxAmount.toString();
+            updateAmountDisplay();
+            triggerSparkEffect();
+        }
+        function backspace() {
+            amount = amount.slice(0, -1);
+            if (amount === '') amount = '0';
+            updateAmountDisplay();
+            triggerSparkEffect();
+        }
+        function quickAdd(val) {
+            let num = parseInt(amount) || 0;
+            num += val;
+            if (num > maxAmount) num = maxAmount;
+            amount = num.toString();
+            updateAmountDisplay();
+            triggerSparkEffect();
+        }
+        function setAll() {
+            amount = maxAmount.toString();
+            updateAmountDisplay();
+            triggerSparkEffect();
+        }
+        function submitAmount() {
+            alert('송금할 금액: ' + (parseInt(amount) || 0) + '원');
+        }
+        function triggerSparkEffect() {
+            if (sparkInputTimeout) clearTimeout(sparkInputTimeout);
+            sparkInputTimeout = setTimeout(() => {
+                let num = parseInt(amount) || 0;
+                // Always use the center of the amount display for the spark origin
+                const amountDisplay = document.querySelector('.amount-display');
+                const rect = amountDisplay.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+                createSparks(x, y, num, 'deposit');
+                // Only shake the mobile frame if amount is over 1,000,000원
+                if (num > 1000000) {
+                    const frame = document.querySelector('.mobile-frame');
+                    frame.classList.remove('shake');
+                    void frame.offsetWidth;
+                    frame.classList.add('shake');
+                }
+            }, 80);
+        }
+        // Firework-like spark effect (same as before, but centered on amount display)
+        function createSparks(x, y, amount, type) {
+            const canvas = document.getElementById('sparkCanvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cappedAmount = Math.min(Math.abs(amount), maxAmount);
+            let color = 'rgba(255, 180, 40, 0.98)';
+            // Get amount display width for scaling
+            const amountDisplay = document.getElementById('amountMain');
+            const displayRect = amountDisplay.getBoundingClientRect();
+            const displayWidth = displayRect.width;
+            // High number of sparks for large amounts
+            const minSparks = 40;
+            const maxSparks = Math.round(300 * (displayWidth / 120));
+            const sparkCount = Math.round(minSparks + (maxSparks - minSparks) * (cappedAmount / maxAmount));
+            // Dramatically increase spark length so some reach the screen edges
+            const minLen = 40;
+            const maxLen = Math.max(
+                120,
+                displayWidth * 2.5,
+                Math.max(
+                    Math.abs(x - 0),
+                    Math.abs(x - canvas.width),
+                    Math.abs(y - 0),
+                    Math.abs(y - canvas.height)
+                ) * 1.1
+            );
+            let progress = 0;
+            const duration = 420; // fast and punchy
+            const sparks = [];
+            for (let i = 0; i < sparkCount; i++) {
+                const angle = Math.random() * 2 * Math.PI;
+                const length = minLen + Math.random() * (maxLen - minLen);
+                const sx = x;
+                const sy = y;
+                const ex = x + Math.cos(angle) * length;
+                const ey = y + Math.sin(angle) * length;
+                const width = 0.8 + Math.random() * 1.2;
+                sparks.push({sx, sy, ex, ey, width, angle, length});
+            }
+            // Flash effect at the origin
+            function drawFlash(t) {
+                const flashAlpha = 0.5 * (1 - t);
+                const flashRadius = 32 + 48 * (1 - t);
+                ctx.save();
+                ctx.globalAlpha = flashAlpha;
+                ctx.beginPath();
+                ctx.arc(x, y, flashRadius, 0, 2 * Math.PI);
+                ctx.fillStyle = 'rgba(255, 230, 120, 1)';
+                ctx.shadowColor = 'rgba(255, 230, 120, 1)';
+                ctx.shadowBlur = 32;
+                ctx.fill();
+                ctx.restore();
+            }
+            function animateSparks() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                progress += 16;
+                const t = Math.min(progress / duration, 1);
+                // Draw flash at the origin
+                drawFlash(t);
+                for (let i = 0; i < sparks.length; i++) {
+                    const s = sparks[i];
+                    // Animate from center to end
+                    const curEx = s.sx + (s.ex - s.sx) * t;
+                    const curEy = s.sy + (s.ey - s.sy) * t;
+                    // Trailing afterimage (faint, behind main line)
+                    ctx.save();
+                    ctx.globalAlpha = 0.18 * (1 - t);
+                    ctx.strokeStyle = color;
+                    ctx.shadowColor = color;
+                    ctx.shadowBlur = 24;
+                    ctx.lineWidth = s.width * 2.2;
+                    ctx.beginPath();
+                    ctx.moveTo(s.sx, s.sy);
+                    ctx.lineTo(curEx, curEy);
+                    ctx.stroke();
+                    ctx.restore();
+                    // Main spark
+                    ctx.save();
+                    ctx.globalAlpha = 1 - t;
+                    ctx.strokeStyle = color;
+                    ctx.shadowColor = color;
+                    ctx.shadowBlur = 18;
+                    ctx.lineWidth = s.width;
+                    ctx.beginPath();
+                    ctx.moveTo(s.sx, s.sy);
+                    ctx.lineTo(curEx, curEy);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+                if (t < 1) {
+                    requestAnimationFrame(animateSparks);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            animateSparks();
+        }
+        // Initial display
+        updateAmountDisplay();
+    </script>
+</body>
+</html> 
