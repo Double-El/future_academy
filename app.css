@@ -1,0 +1,27 @@
+html {
+  font-size: 16px; /* Base size, adjust as needed */
+}
+
+body, .dash-table, .card-title, .card-text, .navbar, .nav, .dropdown, .btn, .form-control, .display-6, h1, h2, h3, h4, h5, h6, label, th, td, div, span, a {
+  font-size: 1.15rem !important; /* Slightly larger than default, but responsive */
+  word-break: keep-all;
+}
+
+@media (max-width: 1200px) {
+  html { font-size: 15px; }
+}
+@media (max-width: 992px) {
+  html { font-size: 14px; }
+}
+@media (max-width: 768px) {
+  html { font-size: 13px; }
+  .card-title, .card-text, h1, h2, h3, h4, h5, h6 {
+    font-size: 1rem !important;
+  }
+}
+@media (max-width: 576px) {
+  html { font-size: 12px; }
+  .card-title, .card-text, h1, h2, h3, h4, h5, h6 {
+    font-size: 0.95rem !important;
+  }
+}

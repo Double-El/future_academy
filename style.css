@@ -1,0 +1,32 @@
+/* 카드 애니메이션 */
+.animated-card {
+  opacity: 0;
+  transform: translateY(30px) scale(0.98);
+  animation: card-fade-in 0.7s forwards;
+}
+@keyframes card-fade-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 카드별 순차적 등장 효과 (animationDelay는 style에서 지정) */
+
+/* 텍스트 페이드인 */
+.fade-in-text {
+  opacity: 0;
+  animation: fade-in-text 1s 0.5s forwards;
+}
+@keyframes fade-in-text {
+  to { opacity: 1; }
+}
+
+/* 숫자 카운트업 텍스트에 적용 가능 */
+
+/* 카드 hover 효과(선택) */
+.animated-card:hover {
+  box-shadow: 0 4px 16px #6c63ff44;
+  transform: translateY(-2px) scale(1.03);
+  transition: box-shadow 0.2s, transform 0.2s;
+} 
