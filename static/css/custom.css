@@ -1,0 +1,1160 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+:root {
+    --bg-dark: #0f172a;
+    --sidebar-bg: #1e293b;
+    --card-bg: #1e293b;
+    --primary-blue: #3b82f6;
+    --text-light: #cbd5e1;
+    --text-dim: #94a3b8;
+    --border-color: #334155;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --info-color: #3b82f6;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', 'Noto Sans KR', Arial, sans-serif;
+    background: radial-gradient(ellipse at center, #0a1833 0%, #0a1120 100%);
+    color: #b6e0ff;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.dashboard-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: var(--sidebar-bg);
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+}
+
+.profile-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.profile-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: var(--primary-blue);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.nav-menu ul {
+    list-style: none;
+}
+
+.nav-menu li {
+    padding: 1rem 1.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-menu li.active, .nav-menu li:hover {
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+.logout-section {
+    margin-top: auto;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.dashboard-grid {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-rows: auto;
+    gap: 1.5rem;
+}
+
+.card {
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    animation: card-fade-in 0.7s forwards;
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+}
+
+.card h3 {
+    margin-bottom: 1rem;
+    font-weight: 500;
+    color: var(--text-light);
+}
+
+.chart-placeholder {
+    height: 200px;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: italic;
+    color: var(--text-dim);
+}
+
+
+.credit-card-mockup {
+    background: linear-gradient(135deg, #ff8c00, #ff0055);
+    border-radius: 10px;
+    padding: 1.5rem;
+    color: white;
+    margin-bottom: 1rem;
+}
+.card-number { font-size: 1.2rem; letter-spacing: 2px; margin: 1rem 0; }
+.card-holder { font-size: 0.9rem; }
+.card-balance span { font-size: 2rem; font-weight: bold; }
+.card-balance small { color: var(--text-dim); }
+
+.list-card ul { list-style: none; }
+.list-card li { display: flex; justify-content: space-between; padding: 0.5rem 0; }
+.list-card li span { font-weight: bold; }
+
+.chat-card {
+    width: 350px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    animation: card-fade-in 0.7s forwards;
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+}
+
+.chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    padding: 0 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    max-height: 450px;
+    scroll-behavior: smooth;
+}
+
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #40c9ff;
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6;
+}
+
+.message {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 0.2rem;
+    animation: message-fade-in 0.5s ease-out;
+}
+
+@keyframes message-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bot-message {
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.user-message {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.chat-bubble {
+    max-width: 85%;
+    padding: 0.8rem 1.2rem;
+    border-radius: 18px;
+    font-size: 1rem;
+    line-height: 1.6;
+    word-break: keep-all;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+    animation: message-fade-in 0.3s ease-out;
+}
+
+.bot-bubble {
+    background: #1e293b;
+    color: #e2e8f0;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    font-weight: 400;
+    position: relative;
+    overflow: hidden;
+}
+
+.bot-bubble.typing::after {
+    content: '|';
+    animation: blink 1s infinite;
+    color: var(--primary-blue);
+    font-weight: bold;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+.user-bubble {
+    background: #3b82f6;
+    color: #fff;
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
+    font-weight: 500;
+}
+
+.chat-author {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin: 0 0.7rem;
+    align-self: flex-end;
+    white-space: nowrap;
+}
+
+#chat-form {
+    display: flex;
+    border-top: 1px solid #22304a;
+    padding: 0.7rem 1.2rem 1rem 1.2rem;
+    background: none;
+}
+
+#chat-input {
+    flex-grow: 1;
+    border: none;
+    background-color: transparent;
+    color: #b6e0ff;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+#chat-input:focus { outline: none; }
+
+#chat-form button {
+    background: #40c9ff;
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    margin-left: 0.5rem;
+    transition: background 0.2s;
+}
+
+#chat-form button:hover {
+    background: #3b82f6;
+}
+
+.customer-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.customer-summary-card {
+    background: linear-gradient(135deg, #1e293b 80%, #3b82f6 100%);
+    border-radius: 10px;
+    padding: 1.2rem 1rem;
+    color: var(--text-light);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px solid var(--border-color);
+    position: relative;
+    min-width: 180px;
+}
+
+.customer-summary-card .customer-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.customer-summary-card .customer-metrics {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3rem 0.7rem;
+    font-size: 0.97rem;
+    margin-bottom: 0.5rem;
+}
+
+.customer-summary-card .metric-label {
+    color: var(--text-dim);
+    font-size: 0.93rem;
+}
+
+.customer-summary-card .metric-value {
+    font-weight: 600;
+    color: var(--primary-blue);
+}
+
+.customer-summary-card .loan-result {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.2rem 0.7rem;
+    border-radius: 12px;
+    background: #222b;
+    color: #fff;
+}
+
+.customer-summary-card .loan-result.approved {
+    background: #22c55e;
+    color: #fff;
+}
+
+.customer-summary-card .loan-result.rejected {
+    background: #ef4444;
+    color: #fff;
+}
+
+.dashboard-visuals {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.dashboard-visuals .card {
+    flex: 1 1 0;
+    min-width: 220px;
+}
+
+.customer-table-card {
+    margin-bottom: 2rem;
+}
+
+.customer-table-wrapper {
+    overflow-x: auto;
+}
+
+.customer-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.customer-table th {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--text-light);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid var(--border-color);
+    transition: background-color 0.3s ease;
+    position: relative;
+}
+
+.customer-table th:hover {
+    background: rgba(59, 130, 246, 0.2);
+}
+
+.customer-table th .sort-icon {
+    transition: all 0.3s ease;
+}
+
+.customer-table th .sort-icon.active {
+    color: var(--primary-blue) !important;
+}
+
+.customer-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.customer-table tr {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.customer-table tr:hover {
+    background: rgba(59, 130, 246, 0.05);
+    transform: translateX(5px);
+}
+
+.customer-table tr.table-row-animate {
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: slide-in-right 0.5s ease-out forwards;
+}
+
+@keyframes slide-in-right {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 고객 이름 셀 */
+.customer-name-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.customer-name {
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+.customer-quick-info {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.grade-badge {
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.grade-badge.grade-1 { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+.grade-badge.grade-2 { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+.grade-badge.grade-3 { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+.grade-badge.grade-4 { background: rgba(251, 146, 60, 0.2); color: #fb923c; }
+.grade-badge.grade-5 { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+.grade-badge.grade-6 { background: rgba(220, 38, 127, 0.2); color: #dc2626; }
+.grade-badge.grade-7 { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+
+.income-info {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+}
+
+.income-value {
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+/* 부채비율 셀 */
+.debt-ratio-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.debt-ratio-value {
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+.debt-ratio-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.debt-ratio-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+/* 연체 상태 */
+.late-status {
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.late-status.no-late {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.late-status.has-late {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+/* 결과 배지 */
+.result-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.result-badge.approved {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.result-badge.rejected {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.result-badge.conditional {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.result-badge:hover {
+    transform: scale(1.05);
+}
+
+/* 액션 버튼 */
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, var(--primary-blue), #1d4ed8);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.action-btn .btn-text {
+    display: inline;
+}
+
+@media (max-width: 768px) {
+    .action-btn .btn-text {
+        display: none;
+    }
+    
+    .customer-quick-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}
+
+.dashboard-neo {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-widgets {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    width: 180px;
+    min-width: 120px;
+    z-index: 2;
+}
+
+.dashboard-widgets.left {
+    margin-left: 0.7rem;
+}
+
+.dashboard-widgets.right {
+    margin-right: 0.7rem;
+}
+
+.main-network {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 320px;
+    position: relative;
+    z-index: 1;
+}
+
+.network-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #40c9ff;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 8px #40c9ff88;
+}
+
+#network-visual {
+    width: 260px;
+    height: 120px;
+    background: url('/static/img/network-tree.png') center/contain no-repeat;
+    margin: 0 auto;
+    filter: drop-shadow(0 0 12px #40c9ff88);
+}
+
+.widget-card {
+    background: rgba(10,24,51,0.85);
+    border: 1.5px solid #40c9ff;
+    border-radius: 12px;
+    box-shadow: 0 0 10px #40c9ff33, 0 2px 8px #000a;
+    padding: 0.6rem 0.7rem;
+    min-height: 60px;
+    min-width: 100px;
+    color: #b6e0ff;
+    margin-bottom: 0.1rem;
+    position: relative;
+    overflow: hidden;
+    font-size: 0.92rem;
+}
+
+.widget-card h3 {
+    color: #40c9ff;
+    font-size: 0.98rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.5px;
+}
+
+.chart-placeholder {
+    min-height: 30px;
+    font-size: 0.92rem;
+}
+
+.customer-detail-card {
+    margin-top: 0.7rem;
+    padding: 0.7rem 1rem;
+    min-width: 180px;
+    font-size: 0.95rem;
+    border-radius: 12px;
+}
+
+.customer-detail-card .customer-detail-title {
+    font-size: 1.05rem;
+    margin-bottom: 0.3rem;
+}
+
+.customer-detail-card .customer-detail-row {
+    gap: 0.5rem;
+    font-size: 0.95rem;
+}
+
+/* Chatbot Floating Button */
+.chatbot-fab {
+    position: fixed;
+    right: 2.5rem;
+    bottom: 2.5rem;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #40c9ff 60%, #0a1833 100%);
+    color: #fff;
+    border: none;
+    box-shadow: 0 0 18px #40c9ff88, 0 2px 8px #000a;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.chatbot-fab:hover {
+    background: linear-gradient(135deg, #40c9ff 80%, #0a1833 100%);
+}
+
+/* Chatbot Panel Overlay */
+.chatbot-panel {
+    position: fixed;
+    right: 2.5rem;
+    bottom: 6.5rem;
+    width: 450px;
+    max-width: 95vw;
+    height: 600px;
+    background: rgba(10,24,51,0.98);
+    border: 2px solid #40c9ff;
+    border-radius: 18px;
+    box-shadow: 0 0 24px #40c9ff88, 0 2px 8px #000a;
+    display: none;
+    flex-direction: column;
+    z-index: 200;
+    animation: chatbot-pop 0.25s;
+}
+
+.chatbot-panel.open {
+    display: flex;
+}
+
+@keyframes chatbot-pop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.chatbot-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.2rem 0.5rem 1.2rem;
+    color: #40c9ff;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.chatbot-close {
+    background: none;
+    border: none;
+    color: #40c9ff;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+/* 카드 애니메이션 */
+.animated-card {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+    animation: card-fade-in 0.7s forwards;
+}
+
+@keyframes card-fade-in {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 텍스트 페이드인 */
+.fade-in-text {
+    opacity: 0;
+    animation: fade-in-text 1s 0.5s forwards;
+}
+
+@keyframes fade-in-text {
+    to { opacity: 1; }
+}
+
+/* 카드 hover 효과(선택) */
+.animated-card:hover {
+    box-shadow: 0 4px 16px #6c63ff44;
+    transform: translateY(-2px) scale(1.03);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+/* 기존 카드 스타일에 애니메이션 적용 */
+.card, .search-card, .detail-card, .chat-card, .customer-search-card {
+    animation: card-fade-in 0.7s forwards;
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+}
+
+.card.animated-card, .search-card.animated-card, .detail-card.animated-card, .chat-card.animated-card, .customer-search-card.animated-card {
+    /* allow for animationDelay via JS or inline style */
+}
+
+/* 순차적 등장 효과는 JS에서 style.animationDelay로 지정 */
+
+/* 상단 통계 카드 그리드 */
+.stats-grid {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 200px;
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    background-color: var(--primary-blue);
+}
+
+.stat-icon.approved {
+    background-color: var(--success-color);
+}
+
+.stat-icon.warning {
+    background-color: var(--warning-color);
+}
+
+.stat-icon.info {
+    background-color: var(--info-color);
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    font-weight: 500;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1200px) {
+    .stats-grid {
+        gap: 1rem;
+    }
+    
+    .stat-card {
+        min-width: 180px;
+        padding: 1.25rem;
+    }
+    
+    .stat-number {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .stats-grid {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .stat-card {
+        min-width: auto;
+    }
+}
+
+/* 반응형 디자인 개선 */
+@media (max-width: 768px) {
+    .chatbot-panel {
+        width: 95vw;
+        height: 70vh;
+        right: 2.5vw;
+        bottom: 2rem;
+    }
+    
+    .chat-messages {
+        max-height: 60vh;
+    }
+    
+    .chat-bubble {
+        max-width: 90%;
+        font-size: 0.95rem;
+    }
+}
+
+/* 고객 상세 정보 동적 스타일 */
+.customer-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.detail-section {
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.detail-section h4 {
+    color: var(--text-light);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.customer-status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+.customer-status-badge.approved {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.customer-status-badge.rejected {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.customer-status-badge.conditional {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.recommended-products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.product-badge {
+    background: linear-gradient(135deg, var(--primary-blue), #1d4ed8);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    animation: badge-pulse 2s infinite;
+}
+
+@keyframes badge-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+.activity-date {
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    min-width: 80px;
+}
+
+.activity-text {
+    color: var(--text-light);
+    flex-grow: 1;
+}
+
+.activity-status {
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.activity-status.completed {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.activity-status.pending {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.reason-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.reason-badge {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--primary-blue);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.detail-footer {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+/* 고객 검색 리스트 애니메이션 */
+#customer-search-list li {
+    animation: slide-in-left 0.3s ease-out forwards;
+    opacity: 0;
+    transform: translateX(-20px);
+}
+
+@keyframes slide-in-left {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 차트 카드 호버 효과 */
+.chart-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* 통계 카드 실시간 업데이트 효과 */
+.stat-number {
+    transition: all 0.3s ease;
+}
+
+.stat-number.updating {
+    animation: number-update 0.5s ease;
+}
+
+@keyframes number-update {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* 반응형 디자인 개선 */
+@media (max-width: 768px) {
+    .customer-detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .recommended-products {
+        justify-content: center;
+    }
+    
+    .activity-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}
+
+/* 챗봇 메시지 특별 스타일 */
+.bot-message .chat-bubble {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    position: relative;
+}
+
+.bot-message .chat-bubble::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid rgba(59, 130, 246, 0.1);
+}

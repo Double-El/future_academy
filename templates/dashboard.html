@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>최종과제제출 XAI 금융 대시보드</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- 왼쪽 사이드바 -->
+        <div class="sidebar">
+            <div class="profile-section">
+                <div class="profile-pic">
+                    <i class="fa fa-user"></i>
+                </div>
+                <h3>양명민_최종과제제출 
+                    
+                    <br>
+                    XAI 금융 대시보드</br></h3>
+            </div>
+            
+            <nav class="nav-menu">
+                <ul>
+                    <li class="active"><i class="fa fa-dashboard"></i> 대시보드</li>
+                    <li><i class="fa fa-users"></i> 고객 관리</li>
+                    <li><i class="fa fa-chart-line"></i> 분석</li>
+                    <li><i class="fa fa-cog"></i> 설정</li>
+                </ul>
+            </nav>
+            
+            <div class="logout-section">
+                <i class="fa fa-sign-out"></i> 로그아웃
+            </div>
+        </div>
+
+        <!-- 메인 콘텐츠 -->
+        <div class="main-content">
+            <!-- 상단 통계 카드 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa fa-users"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="total-customers">-</div>
+                        <div class="stat-label">총 고객 수</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon approved"><i class="fa fa-check-circle"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="approval-rate">-</div>
+                        <div class="stat-label">승인률</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon warning"><i class="fa fa-exclamation-triangle"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="late-rate">-</div>
+                        <div class="stat-label">연체율</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon info"><i class="fa fa-chart-bar"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="avg-income">-</div>
+                        <div class="stat-label">평균 소득</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 차트 섹션 -->
+            <div class="charts-section">
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <h3><i class="fa fa-radar"></i> 신용도 레이더 차트</h3>
+                        <div id="radar-chart"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3><i class="fa fa-chart-bar"></i> 고객 소득별 분포</h3>
+                        <div id="bubble-chart"></div>
+                    </div>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <h3><i class="fa fa-progress-bar"></i> 심사 결과 분포</h3>
+                        <div id="approval-process-chart"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3><i class="fa fa-pie-chart"></i> 신용등급 분포</h3>
+                        <div id="grade-distribution-chart"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 고객 검색 및 상세 정보 -->
+            <div class="customer-section">
+                <div class="customer-search-panel">
+                    <div class="search-header">
+                        <i class="fa fa-search"></i> 고객 검색
+                    </div>
+                    <div class="search-toggle">
+                        <button id="toggle-name" class="toggle-btn active">이름</button>
+                        <button id="toggle-id" class="toggle-btn">ID</button>
+                    </div>
+                    <input type="text" id="customer-search-input" placeholder="이름 또는 ID로 검색..." />
+                    <ul id="customer-search-list"></ul>
+                </div>
+
+                <div class="customer-detail-panel" id="customer-detail-panel" style="display:none;">
+                    <div class="customer-detail-card" id="customer-detail-card"></div>
+                    
+                    <!-- XAI 설명 카드 -->
+                    <div class="xai-explanation-card" id="xai-explanation-card">
+                        <div class="xai-header">
+                            <i class="fa fa-brain"></i> XAI 설명
+                        </div>
+                        <div class="xai-content" id="xai-content">
+                            고객을 선택하면 AI가 심사 결과를 설명합니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 고객 리스트 테이블 -->
+            <div class="customer-table-section">
+                <div class="table-header">
+                    <h3><i class="fa fa-table"></i> 심사 고객 리스트</h3>
+                    <div class="table-filters">
+                        <button class="filter-btn active" data-filter="all">전체</button>
+                        <button class="filter-btn approved" data-filter="승인">승인</button>
+                        <button class="filter-btn rejected" data-filter="거절">거절</button>
+                        <button class="filter-btn conditional" data-filter="조건부승인">조건부승인</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table class="customer-table" id="customer-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>이름</th>
+                                <th>신용등급</th>
+                                <th>소득</th>
+                                <th>부채비율</th>
+                                <th>연체이력</th>
+                                <th>심사결과</th>
+                                <th>액션</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customer-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 챗봇 패널 (오른쪽 하단) -->
+        <div class="chatbot-panel" id="chatbot-panel">
+            <div class="chatbot-header">
+                <span><i class="fa fa-robot"></i> XAI 챗봇</span>
+                <button class="chatbot-close" id="chatbot-close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div id="chat-messages" class="chat-messages"></div>
+            <form id="chat-form">
+                <input type="text" id="chat-input" placeholder="챗봇에게 질문하세요..." autocomplete="off" />
+                <button type="submit"><i class="fa fa-paper-plane"></i></button>
+            </form>
+        </div>
+
+        <!-- 챗봇 플로팅 버튼 -->
+        <div class="chatbot-fab" id="chatbot-fab">
+            <i class="fa fa-comments"></i>
+        </div>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
